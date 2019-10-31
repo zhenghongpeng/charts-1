@@ -61,10 +61,10 @@ airflow:
   ## In version < 2.0, changing these paths won't have any effect.
   image:
     ##
-    # puckel/docker-airflow
+    ## docker-airflow image
     repository: puckel/docker-airflow
     ##
-    # image tag
+    ## image tag
     tag: 1.10.4
     ##
     ## Image pull policy
@@ -159,17 +159,13 @@ airflow:
   #   - name: synchronised-dags
   #     mountPath: /dags
   extraVolumeMounts: []
-  # Additional volumeMounts to the main containers in the Scheduler, Worker and Web pods.
+  ## Additional volumeMounts to the main containers in the Scheduler, Worker and Web pods.
   # - name: synchronised-dags
-    # mountPath: /usr/local/airflow/dags
-  # extraVolumes: []
+  #   mountPath: /usr/local/airflow/dags
   extraVolumes: []
-  # Additional volumes for the Scheduler, Worker and Web pods.
+  ## Additional volumes for the Scheduler, Worker and Web pods.
   # - name: synchronised-dags
-    # persistentVolumeClaim:
-      # claimName: airflow-postgresql
-    # emptyDir: {}
-  # extraVolumeMounts: []
+  #   emptyDir: {}
 
   ##
   ## Run initdb when the scheduler starts.
@@ -394,12 +390,12 @@ ingress:
 persistence:
   ##
   ## enable persistance storage
-  enabled: true
+  enabled: false
   ##
   ## Existing claim to use
-  existingClaim: airflow-postgresql
+  # existingClaim: nil
   ## Existing claim's subPath to use, e.g. "dags" (optional)
-  # subPath: "dags"
+  # subPath: ""
   ##
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
@@ -407,8 +403,8 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
-  storageClass: manual
-  accessMode: ReadWriteMany
+  # storageClass: default
+  accessMode: ReadWriteOnce
   ##
   ## Persistant storage size request
   size: 1Gi
@@ -434,8 +430,8 @@ logsPersistence:
   ##
   ## A configuration for shared log storage requires a `storageClass` that
   ## supports the `ReadWriteMany` accessMode, such as NFS or AWS EFS.
-  storageClass: manual
-  accessMode: ReadWriteMany
+  # storageClass: default
+  accessMode: ReadWriteOnce
   ##
   ## Persistant storage size request
   size: 1Gi
@@ -443,8 +439,6 @@ logsPersistence:
 ##
 ## Configure DAGs deployment and update
 dags:
-  persistence:
-    enabled: true
   ##
   ## mount path for persistent volume.
   ## Note that this location is referred to in airflow.cfg, so if you change it, you must update airflow.cfg accordingly.
@@ -462,8 +456,6 @@ dags:
     ## branch name, tag or sha1 to reset to
     ref: master
     ## pre-created secret with key, key.pub and known_hosts file for private repos
-    subpath: airflow/example_dags
-    wait: 15
     secret: ""
   initContainer:
     ## Fetch the source code when the pods starts
@@ -545,10 +537,10 @@ postgresql:
     enabled: true
     ##
     ## Persistant class
-    storageClass: manual
+    # storageClass: classname
     ##
     ## Access mode:
-    accessMode: ReadWriteMany
+    accessMode: ReadWriteOnce
 
 
 ## Configuration values for the Redis dependency.
@@ -593,7 +585,7 @@ redis:
       # storageClass: classname
       ##
       ## Access mode:
-      accessMode: ReadWriteMany
+      accessMode: ReadWriteOnce
   ##
   ## Disable cluster management by default.
   cluster:

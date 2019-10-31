@@ -29,7 +29,7 @@ serviceAccounts:
 alertmanager:
   ## If false, alertmanager will not be installed
   ##
-  enabled: true
+  enabled: false
 
   ## alertmanager container name
   ##
@@ -151,7 +151,7 @@ alertmanager:
     ## If true, alertmanager will create/use a Persistent Volume Claim
     ## If false, use emptyDir
     ##
-    enabled: true
+    enabled: false
 
     ## alertmanager data Persistent Volume access modes
     ## Must match those of existing PV or dynamic provisioner
@@ -167,7 +167,7 @@ alertmanager:
     ## alertmanager data Persistent Volume existing claim name
     ## Requires alertmanager.persistentVolume.enabled: true
     ## If defined, PVC must be created manually before volume will be bound
-    existingClaim: ""
+    existingClaim: "pvc-nfs-pv1"
 
     ## alertmanager data Persistent Volume mount root path
     ##
@@ -701,7 +701,7 @@ server:
     ## If true, Prometheus server will create/use a Persistent Volume Claim
     ## If false, use emptyDir
     ##
-    enabled: true
+    enabled: false
 
     ## Prometheus server data Persistent Volume access modes
     ## Must match those of existing PV or dynamic provisioner
@@ -717,7 +717,7 @@ server:
     ## Prometheus server data Persistent Volume existing claim name
     ## Requires server.persistentVolume.enabled: true
     ## If defined, PVC must be created manually before volume will be bound
-    existingClaim: ""
+    existingClaim: "pvc-nfs-pv1"
 
     ## Prometheus server data Persistent Volume mount root path
     ##
@@ -734,7 +734,7 @@ server:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    # storageClass: "-"
+    storageClass: "-"
 
     ## Subdirectory of Prometheus server data Persistent Volume to mount
     ## Useful if the volume's root directory is not empty
@@ -973,7 +973,7 @@ pushgateway:
     ## pushgateway data Persistent Volume existing claim name
     ## Requires pushgateway.persistentVolume.enabled: true
     ## If defined, PVC must be created manually before volume will be bound
-    existingClaim: ""
+    existingClaim: "pvc-nfs-pv1"
 
     ## pushgateway data Persistent Volume mount root path
     ##
@@ -1225,6 +1225,7 @@ serverFiles:
 
         kubernetes_sd_configs:
           - role: service
+
 
         relabel_configs:
           - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
